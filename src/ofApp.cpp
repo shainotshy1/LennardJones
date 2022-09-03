@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	set_window();
-	create_environments(5);
+	create_environments(4);
 }
 //--------------------------------------------------------------
 void ofApp::create_environments(int n)

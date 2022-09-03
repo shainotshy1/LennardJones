@@ -180,13 +180,21 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Circle.cpp" />
     <ClCompile Include="src\Environment.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Molecule.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\Rectangle.cpp" />
+    <ClCompile Include="src\Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Circle.h" />
     <ClInclude Include="src\Environment.h" />
+    <ClInclude Include="src\Molecule.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\Rectangle.h" />
+    <ClInclude Include="src\Shape.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

@@ -10,6 +10,18 @@
     <ClCompile Include="src\Environment.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Shape.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Molecule.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Circle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rectangle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -21,6 +33,18 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Environment.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shape.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Molecule.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Circle.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rectangle.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
