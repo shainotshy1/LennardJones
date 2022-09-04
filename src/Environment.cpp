@@ -5,7 +5,8 @@ Environment::Environment(glm::vec2 pos, glm::vec2 dim, double density)
 	:font_size_{ 25 }, 
 	pos_ { pos }, 
 	dim_{ dim }, 
-	density_{ CLAMP(density, 0, 1) }
+	density_{ CLAMP(density, 0, 1) },
+	background_{ RectangleShape(pos, dim) }
 {
 	font1_.load("font1.ttf", font_size_);
 }
@@ -19,6 +20,11 @@ void Environment::update()
 {
 }
 
+void Environment::set_background_clr(ofColor clr)
+{
+	background_.fill_clr_ = clr;
+}
+
 //methods
 void Environment::display() const
 {
@@ -29,13 +35,7 @@ void Environment::display() const
 
 void Environment::display_background() const
 {
-	ofFill();
-	ofSetLineWidth(3);
-	ofSetColor(ofColor::lightGray);
-	ofDrawRectangle(pos_, dim_.x, dim_.y);
-	ofNoFill();
-	ofSetColor(ofColor::black);
-	ofDrawRectangle(pos_, dim_.x, dim_.y);
+	background_.display();
 }
 
 void Environment::display_molecules() const

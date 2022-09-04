@@ -16,10 +16,10 @@
     <ClCompile Include="src\Molecule.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Circle.cpp">
+    <ClCompile Include="src\CircleShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rectangle.cpp">
+    <ClCompile Include="src\RectangleShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,10 +41,10 @@
     <ClInclude Include="src\Molecule.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Circle.h">
+    <ClInclude Include="src\CircleShape.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rectangle.h">
+    <ClInclude Include="src\RectangleShape.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

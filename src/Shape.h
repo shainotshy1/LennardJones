@@ -8,19 +8,24 @@ struct Shape
 	ofColor fill_clr_;
 	ofColor stroke_clr_;
 	glm::vec2 pos_;
-	double radius_;
+	glm::vec2 dim_;
 	double stroke_width_;
 
 	//constructor
 	Shape(glm::vec2 pos,
-		double radius, 
+		glm::vec2 dim, 
 		double stroke_width, 
-		ofColor fill_clr_ = ofColor::lightGray, 
-		ofColor stroke_clr = ofColor::black);
+		ofColor fill_clr_, 
+		ofColor stroke_clr);
 
 	//destructor
 	~Shape();
 
-	//virtual methods
-	virtual void display() const = 0;
+	//methods
+	void display() const;
+
+private:
+
+	//private virtual methods
+	virtual void draw_shape(ofColor) const = 0;
 };
