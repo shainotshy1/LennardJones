@@ -14,9 +14,9 @@ struct Shape
 	//constructor
 	Shape(glm::vec2 pos,
 		glm::vec2 dim, 
-		double stroke_width, 
 		ofColor fill_clr_, 
-		ofColor stroke_clr);
+		ofColor stroke_clr,
+		double stroke_width);
 
 	//destructor
 	~Shape();

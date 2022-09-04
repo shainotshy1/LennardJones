@@ -2,10 +2,12 @@
 
 #include "ofMain.h"
 #include "RectangleShape.h"
+#include "Molecule.h"
 
 class Environment {
 private:
 	//member variables
+	RectangleShape background_;
 	ofTrueTypeFont font1_;
 	int font_size_;
 
@@ -13,7 +15,7 @@ private:
 	glm::vec2 dim_;
 	double density_;
 
-	RectangleShape background_;
+	vector<Molecule> molecules_;
 
 public:
 	//constructor
@@ -24,9 +26,16 @@ public:
 	
 	//methods
 	void update();
+	void reset();
+
 	void set_background_clr(ofColor);
 	void display() const;
 	void display_background() const;
 	void display_molecules() const;
 	void display_label() const;
+
+private:
+	
+	//private methods
+	void load_molecules_(int n);
 };
