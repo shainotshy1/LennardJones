@@ -9,7 +9,7 @@ struct RectangleShape : Shape
 		glm::vec2 dim,
 		ofColor fill_clr_ = ofColor::lightGray,
 		ofColor stroke_clr = ofColor::black,
-		double stroke_width = 1);
+		double stroke_width = 3);
 
 	//destructor
 	~RectangleShape();

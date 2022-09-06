@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	set_window();
-	create_environments(4);
+	create_environments(16);
 }
 //--------------------------------------------------------------
 void ofApp::create_environments(int n)
@@ -24,6 +24,7 @@ void ofApp::create_environments(int n)
 		cols_per_row[i] = cols;
 	}
 
+	int max_molecules = 100;
 	int current_cell = 1;
 	for (int i = 0; i < rows; i++) {
 
@@ -43,7 +44,8 @@ void ofApp::create_environments(int n)
 			glm::vec2 dim = glm::vec2(w, h);
 			double density = current_cell * 1.0 / n;
 
-			Environment env = Environment(pos, dim, density);
+			Environment env = Environment(pos, dim, max_molecules, density);
+			env.set_background_clr(ofColor::lightYellow);
 			environments_.push_back(env);
 			
 			current_cell++;
@@ -76,14 +78,14 @@ void ofApp::set_window()
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	for (Environment env : environments_) {
+	for (Environment& env : environments_) {
 		env.update();
 	}
 }
 //--------------------------------------------------------------
 void ofApp::draw_environments() 
 {
-	for (Environment env : environments_) {
+	for (Environment& env : environments_) {
 		env.display();
 	}
 }

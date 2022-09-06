@@ -11,7 +11,7 @@ struct Shape
 	glm::vec2 dim_;
 	double stroke_width_;
 
-	//constructor
+	//constructors
 	Shape(glm::vec2 pos,
 		glm::vec2 dim, 
 		ofColor fill_clr_, 
