@@ -47,8 +47,25 @@
     <ClInclude Include="src\RectangleShape.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\cuda_memory_utils.cuh">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MoleculeSimulator.cuh">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\molecule_sim_helper.cuh">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\MoleculeSimulator.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="src\molecule_sim_helper.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

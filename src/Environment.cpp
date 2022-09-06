@@ -47,6 +47,8 @@ void Environment::update_molecules()
 
 void Environment::simulate_interactions()
 {
+	simulator_.simulate_molecules();
+
 	//To Do: Implement Lennard Jones
 	//Bounce off walls of environment
 	for (Molecule& molecule : molecules_) {

@@ -52,6 +52,9 @@
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.7.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="../../../Downloads/of_v0.11.2_vs2017_release/of_v0.11.2_vs2017_release/libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
@@ -190,8 +193,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CircleShape.h" />
+    <ClInclude Include="src\cuda_memory_utils.cuh" />
     <ClInclude Include="src\Environment.h" />
     <ClInclude Include="src\Molecule.h" />
+    <ClInclude Include="src\MoleculeSimulator.cuh" />
+    <ClInclude Include="src\molecule_sim_helper.cuh" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\RectangleShape.h" />
     <ClInclude Include="src\Shape.h" />
@@ -208,7 +214,14 @@
       <AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\MoleculeSimulator.cu" />
+    <CudaCompile Include="src\molecule_sim_helper.cu" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.7.targets" />
+  </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
       <UserProperties RESOURCE_FILE="icon.rc" />

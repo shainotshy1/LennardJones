@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "RectangleShape.h"
 #include "Molecule.h"
+#include "MoleculeSimulator.cuh"
 
 class Environment {
 private:
@@ -18,6 +19,8 @@ private:
 
 	int max_molecules_;
 	vector<Molecule> molecules_;
+
+	MoleculeSimulator simulator_;
 
 public:
 	//constructor
