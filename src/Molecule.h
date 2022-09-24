@@ -23,7 +23,6 @@ public:
 
 	//methods
 	void display() const;
-	void update();
 	glm::vec2 get_pos() const;
 	glm::vec2 get_vel() const;
 	double get_radius() const;

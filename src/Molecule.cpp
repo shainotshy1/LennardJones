@@ -22,14 +22,6 @@ void Molecule::display() const
 	molecule_.display();
 }
 
-void Molecule::update()
-{
-	double x = molecule_.pos_.x + vel_.x;
-	double y = molecule_.pos_.y + vel_.y;
-
-	set_pos(glm::vec2(x, y));
-}
-
 glm::vec2 Molecule::get_pos() const
 {
 	return molecule_.pos_;

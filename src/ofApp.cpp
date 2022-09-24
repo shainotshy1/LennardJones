@@ -3,11 +3,17 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	set_window();
-	create_environments(16);
+	create_environments(9);
+}
+void ofApp::exit()
+{
+	delete mol_simulator_;
 }
 //--------------------------------------------------------------
 void ofApp::create_environments(int n)
 {
+	environments_ = vector<Environment>{};
+
 	int corner_x = border_pos_.x;
 	int corner_y = border_pos_.y;
 
@@ -24,7 +30,7 @@ void ofApp::create_environments(int n)
 		cols_per_row[i] = cols;
 	}
 
-	int max_molecules = 100;
+	int max_molecules = 1000;
 	int current_cell = 1;
 	for (int i = 0; i < rows; i++) {
 
@@ -53,6 +59,8 @@ void ofApp::create_environments(int n)
 	}
 
 	delete[] cols_per_row;
+
+	mol_simulator_ = new MoleculeSimulator(environments_);
 }
 
 //--------------------------------------------------------------
@@ -78,16 +86,12 @@ void ofApp::set_window()
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	for (Environment& env : environments_) {
-		env.update();
-	}
+	mol_simulator_->simulate_molecules();
 }
 //--------------------------------------------------------------
 void ofApp::draw_environments() 
 {
-	for (Environment& env : environments_) {
-		env.display();
-	}
+	mol_simulator_->update_environments();
 }
 
 //--------------------------------------------------------------

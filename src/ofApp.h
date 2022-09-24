@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Environment.h"
+#include "MoleculeSimulator.cuh"
 
 class ofApp : public ofBaseApp{
 
@@ -9,11 +10,13 @@ private:
 	//member variables
 	glm::vec2 border_pos_;
 	glm::vec2 border_dim_;
+	MoleculeSimulator* mol_simulator_;
 	vector<Environment> environments_;
 
 public:
 	//methods
 	void setup();
+	void exit();
 	void set_window();
 	void create_environments(int n);
 	void update();
