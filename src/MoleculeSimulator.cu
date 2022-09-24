@@ -142,7 +142,7 @@ void MoleculeSimulator::simulate_molecules()
 	glm::vec2 env_pos;
 	glm::vec2 env_dim;
 
-	int block_size = num_molecules_ > 512 ? 512 : 256;
+	int block_size = 512;
 	int num_blocks = (num_molecules_ - 1) / block_size + 1;
 
 	dim3 block(block_size);
