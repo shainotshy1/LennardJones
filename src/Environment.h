@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 #include "RectangleShape.h"
-#include "Molecule.h"
 
 struct Environment {
 	//member variables

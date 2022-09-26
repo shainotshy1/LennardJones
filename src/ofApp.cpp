@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	set_window();
-	create_environments(9);
+	create_environments(16);
 }
 void ofApp::exit()
 {

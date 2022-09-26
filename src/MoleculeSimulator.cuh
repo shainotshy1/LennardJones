@@ -1,7 +1,6 @@
 #pragma once
 
 #include "molecule_sim_helper.cuh"
-#include "Molecule.h"
 #include "Environment.h"
 
 class MoleculeSimulator 

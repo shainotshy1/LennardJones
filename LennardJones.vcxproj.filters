@@ -13,9 +13,6 @@
     <ClCompile Include="src\Shape.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Molecule.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\CircleShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -36,9 +33,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Shape.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Molecule.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\CircleShape.h">
