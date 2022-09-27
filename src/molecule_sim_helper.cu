@@ -1,4 +1,5 @@
 #include "molecule_sim_helper.cuh"
+#include "cuda_memory_utils.cuh"
 
 __global__ void simulate_molecules_gpu(int* env_molecules,
 	double* pos_x,
@@ -11,7 +12,13 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 	double* env_pos_x,
 	double* env_pos_y,
 	double* dim_x,
-	double* dim_y)
+	double* dim_y,
+	int* csr_i,
+	int* csr_j,
+	int* csr_v,
+	double global_dim_x,
+	double global_dim_y,
+	double grid_dim)
 
 {
 	//To Do: Implement Lennard Jones
@@ -31,6 +38,16 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 		j++;
 	}
 
+	simulate_molecules(i,
+		pos_x,
+		pos_y,
+		vel_x,
+		vel_y,
+		radii,
+		csr_i,
+		csr_j,
+		csr_v);
+
 	bound_molecules(i,
 		pos_x,
 		pos_y,
@@ -43,6 +60,19 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 		dim_x[j]);
 	
 	update_molecule(i, pos_x, pos_y, vel_x, vel_y);
+}
+
+__device__ void simulate_molecules(int i, 
+	double* pos_x, 
+	double* pos_y, 
+	double* vel_x, 
+	double* vel_y, 
+	double* radii, 
+	int* csr_i, 
+	int* csr_j, 
+	int* csr_v)
+{
+	
 }
 
 __device__ void bound_molecules(int i,

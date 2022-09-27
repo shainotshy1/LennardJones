@@ -1,8 +1,13 @@
 #include "MoleculeSimulator.cuh"
 #include "cuda_memory_utils.cuh"
+#include "CircleShape.h"
 
-MoleculeSimulator::MoleculeSimulator(vector<Environment> environments)
-	: environments_{environments}
+MoleculeSimulator::MoleculeSimulator(glm::vec2 global_dim, 
+	vector<Environment> environments, 
+	double min_radius)
+	: global_dim_{ global_dim }, 
+	environments_ { environments }, 
+	min_radius_{ min_radius}
 {
 	for (auto env : environments_) {
 		num_molecules_ += env.num_molecules_;
@@ -62,6 +67,17 @@ void MoleculeSimulator::allocate_workspace()
 	allocate_on_device(&env_pos_y_d_, num_environments_);
 	allocate_on_device(&env_dim_x_d_, num_environments_);
 	allocate_on_device(&env_dim_y_d_, num_environments_);
+
+	double world_grid_dim = sqrt(2) * min_radius_;
+	int rows = ceil(global_dim_.x / world_grid_dim);
+
+	grid_i_h_ = new int[rows + 1];
+	grid_j_h_ = new int[num_molecules_];
+	grid_v_h_ = new int[num_molecules_];
+
+	allocate_on_device(&grid_i_d_, rows + 1);
+	allocate_on_device(&grid_j_d_, num_molecules_);
+	allocate_on_device(&grid_v_d_, num_molecules_);
 }
 
 void MoleculeSimulator::copy_env_to_memory() 
@@ -119,6 +135,8 @@ void MoleculeSimulator::copy_env_to_memory()
 	copy_to_device(env_pos_y_h_, env_pos_y_d_, num_environments_);
 	copy_to_device(env_dim_x_h_, env_dim_x_d_, num_environments_);
 	copy_to_device(env_dim_y_h_, env_dim_y_d_, num_environments_);
+
+	copy_to_device(grid_i_h_, grid_i_d_, 0);
 }
 
 void MoleculeSimulator::update_environments()
@@ -159,7 +177,13 @@ void MoleculeSimulator::simulate_molecules()
 		env_pos_x_d_,
 		env_pos_y_d_,
 		env_dim_x_d_,
-		env_dim_y_d_);
+		env_dim_y_d_,
+		grid_i_d_,
+		grid_j_d_,
+		grid_v_d_,
+		global_dim_.x,
+		global_dim_.y,
+		min_radius_);
 
 	cudaDeviceSynchronize();
 }

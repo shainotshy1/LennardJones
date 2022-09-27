@@ -60,7 +60,9 @@ void ofApp::create_environments(int n)
 
 	delete[] cols_per_row;
 
-	mol_simulator_ = new MoleculeSimulator(environments_);
+	mol_simulator_ = new MoleculeSimulator(border_dim_, 
+		environments_,
+		5);
 }
 
 //--------------------------------------------------------------

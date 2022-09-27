@@ -8,8 +8,17 @@ class MoleculeSimulator
 private:
 	//member variables
 	vector<Environment> environments_;
+	glm::vec2 global_dim_;
+	double min_radius_;
 	int num_molecules_ = 0;
 	int num_environments_ = 0;
+
+	int* grid_i_h_;
+	int* grid_j_h_;
+	int* grid_v_h_;
+	int* grid_i_d_;
+	int* grid_j_d_;
+	int* grid_v_d_;
 
 	int* env_molecules_d_;
 	int* env_molecules_h_;
@@ -39,7 +48,9 @@ private:
 public:
 	//constructor
 	MoleculeSimulator() = default;
-	MoleculeSimulator(vector<Environment>);
+	MoleculeSimulator(glm::vec2 global_dim, 
+		vector<Environment> environments,
+		double min_radius);
 
 	//destructor
 	~MoleculeSimulator();
