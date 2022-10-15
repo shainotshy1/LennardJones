@@ -11,15 +11,12 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 	int num_environments,
 	double* env_pos_x,
 	double* env_pos_y,
-	double* dim_x,
-	double* dim_y,
-	int* csr_i,
-	int* csr_j,
-	int* csr_v,
+	double* env_dim_x,
+	double* env_dim_y,
+	int* grid,
 	double global_dim_x,
 	double global_dim_y,
 	double grid_dim)
-
 {
 	//To Do: Implement Lennard Jones
 	//To Do: Parrallelize molecules of all environments into ONE kernel call:
@@ -37,16 +34,17 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 		k += env_molecules[j];
 		j++;
 	}
-
+	
 	simulate_molecules(i,
 		pos_x,
 		pos_y,
 		vel_x,
 		vel_y,
 		radii,
-		csr_i,
-		csr_j,
-		csr_v);
+		grid,
+		global_dim_x,
+		global_dim_y,
+		grid_dim);
 
 	bound_molecules(i,
 		pos_x,
@@ -56,21 +54,22 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 		radii,
 		env_pos_x[j],
 		env_pos_y[j],
-		dim_x[j],
-		dim_x[j]);
+		env_dim_x[j],
+		env_dim_y[j]);
 	
 	update_molecule(i, pos_x, pos_y, vel_x, vel_y);
 }
 
-__device__ void simulate_molecules(int i, 
-	double* pos_x, 
-	double* pos_y, 
-	double* vel_x, 
-	double* vel_y, 
-	double* radii, 
-	int* csr_i, 
-	int* csr_j, 
-	int* csr_v)
+__device__ void simulate_molecules(int i,
+	double* pos_x,
+	double* pos_y,
+	double* vel_x,
+	double* vel_y,
+	double* radii,
+	int* grid,
+	double global_dim_x,
+	double global_dim_y,
+	double grid_dim)
 {
 	
 }
@@ -83,16 +82,16 @@ __device__ void bound_molecules(int i,
 	double* radii,
 	double env_pos_x,
 	double env_pos_y,
-	double dim_x,
-	double dim_y)
+	double env_dim_x,
+	double env_dim_y)
 {
-	double dif_pos_x = env_pos_x + dim_x - pos_x[i];
-	double dif_pos_y = env_pos_y + dim_y - pos_y[i];
+	double dif_pos_x = env_pos_x + env_dim_x - pos_x[i];
+	double dif_pos_y = env_pos_y + env_dim_y - pos_y[i];
 	double radius = radii[i];
-	if (dif_pos_x >= dim_x - radius || dif_pos_x <= radius) {
+	if (dif_pos_x >= env_dim_x - radius || dif_pos_x <= radius) {
 		vel_x[i] *= -1;
 	}
-	if (dif_pos_y >= dim_y - radius || dif_pos_y <= radius) {
+	if (dif_pos_y >= env_dim_y - radius || dif_pos_y <= radius) {
 		vel_y[i] *= -1;
 	}
 }

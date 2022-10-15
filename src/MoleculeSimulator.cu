@@ -3,11 +3,13 @@
 #include "CircleShape.h"
 
 MoleculeSimulator::MoleculeSimulator(glm::vec2 global_dim, 
+	glm::vec2 global_pos,
 	vector<Environment> environments, 
 	double min_radius)
 	: global_dim_{ global_dim }, 
+	global_pos_{ global_pos },
 	environments_ { environments }, 
-	min_radius_{ min_radius}
+	world_grid_dim_{ sqrt(2) * min_radius }
 {
 	for (auto env : environments_) {
 		num_molecules_ += env.num_molecules_;
@@ -29,6 +31,7 @@ MoleculeSimulator::~MoleculeSimulator()
 	delete_on_device(vel_x_d_);
 	delete_on_device(vel_y_d_);
 	delete_on_device(radii_d_);
+	delete_on_device(grid_d_);
 
 	delete[] env_molecules_h_;
 	delete[] env_pos_x_h_;
@@ -40,6 +43,7 @@ MoleculeSimulator::~MoleculeSimulator()
 	delete[] vel_x_h_;
 	delete[] vel_y_h_;
 	delete[] radii_h_;
+	delete[] grid_h_;
 }
 
 void MoleculeSimulator::allocate_workspace()
@@ -59,7 +63,7 @@ void MoleculeSimulator::allocate_workspace()
 	env_molecules_h_ = new int[num_environments_];
 	env_pos_x_h_ = new double[num_environments_];
 	env_pos_y_h_ = new double[num_environments_];
-	env_dim_x_h_ = new double[num_environments_];
+	env_dim_x_h_ = new double[num_environments_]; 
 	env_dim_y_h_ = new double[num_environments_];
 
 	allocate_on_device(&env_molecules_d_, num_environments_);
@@ -68,21 +72,19 @@ void MoleculeSimulator::allocate_workspace()
 	allocate_on_device(&env_dim_x_d_, num_environments_);
 	allocate_on_device(&env_dim_y_d_, num_environments_);
 
-	double world_grid_dim = sqrt(2) * min_radius_;
-	int rows = ceil(global_dim_.x / world_grid_dim);
+	cell_dim_.x = ceil(global_dim_.x / world_grid_dim_);
+	cell_dim_.y = ceil(global_dim_.y / world_grid_dim_);
 
-	grid_i_h_ = new int[rows + 1];
-	grid_j_h_ = new int[num_molecules_];
-	grid_v_h_ = new int[num_molecules_];
-
-	allocate_on_device(&grid_i_d_, rows + 1);
-	allocate_on_device(&grid_j_d_, num_molecules_);
-	allocate_on_device(&grid_v_d_, num_molecules_);
+	int cells = cell_dim_.x * cell_dim_.y;
+	grid_h_ = new int[cells];
+	allocate_on_device(&grid_d_, cells);
 }
 
 void MoleculeSimulator::copy_env_to_memory() 
 {
 	int mol_i = 0;
+	int env_num = 0;
+	int total = 0;
 	for (auto env : environments_) {
 
 		glm::vec2 env_dim = env.dim_;
@@ -110,8 +112,23 @@ void MoleculeSimulator::copy_env_to_memory()
 			vel_y_h_[mol_i] = vel_y;
 			radii_h_[mol_i] = radius;
 
+			//TO DO: make helper file with method to get index in the grid rather than repeat this code
+			int row = (x - global_pos_.x) / world_grid_dim_;
+			int col = (y - global_pos_.y) / world_grid_dim_;
+			int index = floor(row * cell_dim_.x + col);
+			int cells = cell_dim_.x * cell_dim_.y;
+			if (index >= cells) {
+				printf("%d ERROR INDEX OUT OF BOUNDS: %d\n", env_num, index);
+				printf("\nX: %f0.4, Y: %f0.4, World Dim: %f04\n", x, y, global_dim_.x);
+			}
+			else {
+				grid_h_[index] = mol_i;
+			}
+
 			mol_i++;
 		}
+		total += env_num;
+		env_num++;
 	}
 
 	copy_to_device(pos_x_h_, pos_x_d_, num_molecules_);
@@ -136,7 +153,8 @@ void MoleculeSimulator::copy_env_to_memory()
 	copy_to_device(env_dim_x_h_, env_dim_x_d_, num_environments_);
 	copy_to_device(env_dim_y_h_, env_dim_y_d_, num_environments_);
 
-	copy_to_device(grid_i_h_, grid_i_d_, 0);
+	int cells = cell_dim_.x * cell_dim_.y;
+	copy_to_device(grid_h_, grid_d_, cells);
 }
 
 void MoleculeSimulator::update_environments()
@@ -166,6 +184,15 @@ void MoleculeSimulator::simulate_molecules()
 	dim3 block(block_size);
 	dim3 grid(num_blocks);
 
+	/// <TO DO>
+	/// neighbors array is a 1d mapping of a matrix
+	/// matrix row i is neighbors for molecule i
+	/// row entries are index of neighbors, -1 if no neighbor
+	/// if a molecule exits range, replace with -1
+	/// when a molecule exits a molecule's neighbor check the neighbors
+	/// of the exited neighbor cell's neighbor within the neighbors
+	/// of the target molecule
+	/// </>
 	simulate_molecules_gpu << <grid, block >> > (env_molecules_d_,
 		pos_x_d_,
 		pos_y_d_,
@@ -178,12 +205,10 @@ void MoleculeSimulator::simulate_molecules()
 		env_pos_y_d_,
 		env_dim_x_d_,
 		env_dim_y_d_,
-		grid_i_d_,
-		grid_j_d_,
-		grid_v_d_,
+		grid_d_,
 		global_dim_.x,
 		global_dim_.y,
-		min_radius_);
+		world_grid_dim_);
 
 	cudaDeviceSynchronize();
 }
