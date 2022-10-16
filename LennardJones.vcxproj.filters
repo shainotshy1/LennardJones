@@ -19,6 +19,9 @@
     <ClCompile Include="src\RectangleShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\helper_utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -50,6 +53,7 @@
     <ClInclude Include="src\molecule_sim_helper.cuh">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\helper_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

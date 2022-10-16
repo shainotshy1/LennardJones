@@ -185,6 +185,7 @@
   <ItemGroup>
     <ClCompile Include="src\CircleShape.cpp" />
     <ClCompile Include="src\Environment.cpp" />
+    <ClCompile Include="src\helper_utils.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\RectangleShape.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="src\CircleShape.h" />
     <ClInclude Include="src\cuda_memory_utils.cuh" />
     <ClInclude Include="src\Environment.h" />
+    <ClInclude Include="src\helper_utils.h" />
     <ClInclude Include="src\MoleculeSimulator.cuh" />
     <ClInclude Include="src\molecule_sim_helper.cuh" />
     <ClInclude Include="src\ofApp.h" />
