@@ -14,8 +14,12 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 	double* env_dim_x,
 	double* env_dim_y,
 	int* grid,
+	int cell_dim_x,
+	int cell_dim_y,
 	double global_dim_x,
 	double global_dim_y,
+	double global_pos_x,
+	double global_pos_y,
 	double grid_dim);
 
 //csr_i, csr_j - csr row offsets and col pointers representing global position of molecules
@@ -27,8 +31,12 @@ __device__ void simulate_molecules(int i,
 	double* vel_y,
 	double* radii,
 	int* grid,
+	int cell_dim_x,
+	int cell_dim_y,
 	double global_dim_x,
 	double global_dim_y,
+	double global_pos_x,
+	double global_pos_y,
 	double grid_dim);
 
 __device__ void bound_molecules(int i,

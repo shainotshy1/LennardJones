@@ -19,7 +19,7 @@
     <ClCompile Include="src\RectangleShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\helper_utils.cpp">
+    <ClCompile Include="src\helper_utils.cu">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClInclude Include="src\molecule_sim_helper.cuh">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\helper_utils.h" />
+    <ClInclude Include="src\helper_utils.cuh" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

@@ -1,7 +1,7 @@
 #include "MoleculeSimulator.cuh"
 #include "cuda_memory_utils.cuh"
 #include "CircleShape.h"
-#include "helper_utils.h"
+#include "helper_utils.cuh"
 
 MoleculeSimulator::MoleculeSimulator(glm::vec2 global_dim, 
 	glm::vec2 global_pos,
@@ -209,8 +209,12 @@ void MoleculeSimulator::simulate_molecules()
 		env_dim_x_d_,
 		env_dim_y_d_,
 		grid_d_,
+		cell_dim_.x,
+		cell_dim_.y,
 		global_dim_.x,
 		global_dim_.y,
+		global_pos_.x,
+		global_pos_.y,
 		world_grid_dim_);
 
 	cudaDeviceSynchronize();

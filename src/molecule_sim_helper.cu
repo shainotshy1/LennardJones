@@ -1,5 +1,6 @@
 #include "molecule_sim_helper.cuh"
 #include "cuda_memory_utils.cuh"
+#include "helper_utils.cuh"
 
 __global__ void simulate_molecules_gpu(int* env_molecules,
 	double* pos_x,
@@ -14,15 +15,18 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 	double* env_dim_x,
 	double* env_dim_y,
 	int* grid,
+	int cell_dim_x,
+	int cell_dim_y,
 	double global_dim_x,
 	double global_dim_y,
+	double global_pos_x,
+	double global_pos_y,
 	double grid_dim)
 {
 	//To Do: Implement Lennard Jones
 	//To Do: Parrallelize molecules of all environments into ONE kernel call:
 		//Contains an array of length n where n = # of environments
 		//Array has number of molecules in each environment so we know what segments of the pos/vel/radii vectors map to which environments
-	//Bounce off walls of environment
 
 	int i = blockIdx.x * blockDim.x + threadIdx.x; //global molecule index
 
@@ -42,8 +46,12 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 		vel_y,
 		radii,
 		grid,
+		cell_dim_x,
+		cell_dim_y,
 		global_dim_x,
 		global_dim_y,
+		global_pos_x,
+		global_pos_y,
 		grid_dim);
 
 	bound_molecules(i,
@@ -67,11 +75,32 @@ __device__ void simulate_molecules(int i,
 	double* vel_y,
 	double* radii,
 	int* grid,
+	int cell_dim_x,
+	int cell_dim_y,
 	double global_dim_x,
 	double global_dim_y,
+	double global_pos_x,
+	double global_pos_y,
 	double grid_dim)
 {
-	
+#if 1
+
+	int row = (pos_x[i] - global_pos_x) / grid_dim;
+	int col = (pos_y[i] - global_pos_y) / grid_dim;
+	int index = (int)(row * cell_dim_x + col);
+
+	if (index >= cell_dim_x * cell_dim_y) {
+		printf("ERROR");
+	}
+#else
+	int index = find_grid_index(pos_x[i],
+		pos_y[i],
+		global_pos_x,
+		global_pos_y,
+		cell_dim_x,
+		cell_dim_y,
+		grid_dim);
+#endif
 }
 
 __device__ void bound_molecules(int i,

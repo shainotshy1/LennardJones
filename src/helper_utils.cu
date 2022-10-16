@@ -1,5 +1,4 @@
-#include "helper_utils.h"
-#include <cmath>
+#include "helper_utils.cuh"
 
 __host__ __device__ int find_grid_index(double x,
 	double y,
@@ -11,7 +10,7 @@ __host__ __device__ int find_grid_index(double x,
 {
 	int row = (x - grid_x) / grid_dim;
 	int col = (y - grid_y) / grid_dim;
-	int index = floor(row * cell_dim_x + col);
+	int index = (int)(row * cell_dim_x + col);
 
 	if (index >= cell_dim_x * cell_dim_y) {
 		return -1;
