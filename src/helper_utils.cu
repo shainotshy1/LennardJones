@@ -1,6 +1,6 @@
 #include "helper_utils.cuh"
 
-__host__ __device__ int find_grid_index(double x,
+int find_grid_index(double x,
 	double y,
 	double grid_x,
 	double grid_y,

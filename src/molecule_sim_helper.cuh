@@ -54,4 +54,10 @@ __device__ void update_molecule(int i,
 	double* pos_x,
 	double* pos_y,
 	double* vel_x,
-	double* vel_y);
+	double* vel_y,
+	int* grid,
+	double global_pos_x,
+	double global_pos_y,
+	double grid_dim,
+	double cell_dim_x,
+	double cell_dim_y);

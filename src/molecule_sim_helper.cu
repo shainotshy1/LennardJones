@@ -65,7 +65,17 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 		env_dim_x[j],
 		env_dim_y[j]);
 	
-	update_molecule(i, pos_x, pos_y, vel_x, vel_y);
+	update_molecule(i, 
+		pos_x, 
+		pos_y, 
+		vel_x, 
+		vel_y,
+		grid,
+		global_pos_x,
+		global_pos_y,
+		grid_dim,
+		cell_dim_x,
+		cell_dim_y);
 }
 
 __device__ void simulate_molecules(int i,
@@ -90,7 +100,7 @@ __device__ void simulate_molecules(int i,
 	int index = (int)(row * cell_dim_x + col);
 
 	if (index >= cell_dim_x * cell_dim_y) {
-		printf("ERROR");
+		printf("ERROR index out of bound molecule");
 	}
 #else
 	int index = find_grid_index(pos_x[i],
@@ -101,6 +111,9 @@ __device__ void simulate_molecules(int i,
 		cell_dim_y,
 		grid_dim);
 #endif
+	if (grid[index] != i) {
+		printf("Error %d VS %d\n\n", grid[index], i);
+	}
 }
 
 __device__ void bound_molecules(int i,
@@ -129,8 +142,24 @@ __device__ void update_molecule(int i,
 	double* pos_x, 
 	double* pos_y, 
 	double* vel_x, 
-	double* vel_y)
+	double* vel_y,
+	int* grid,
+	double global_pos_x,
+	double global_pos_y,
+	double grid_dim,
+	double cell_dim_x,
+	double cell_dim_y)
 {
 	pos_x[i] += vel_x[i];
 	pos_y[i] += vel_y[i];
+
+	int row = (pos_x[i] - global_pos_x) / grid_dim;
+	int col = (pos_y[i] - global_pos_y) / grid_dim;
+	int index = (int)(row * cell_dim_x + col);
+
+	if (index >= cell_dim_x * cell_dim_y) {
+		printf("ERROR index out of bound molecule");
+	}
+
+	grid[index] = i;
 }
