@@ -88,19 +88,19 @@ void MoleculeSimulator::copy_env_to_memory()
 	int total = 0;
 	for (auto env : environments_) {
 
-		glm::vec2 env_dim = env.dim_;
-		glm::vec2 env_pos = env.pos_;
 		//double area = dim.x * dim.y;
 		//double area_proportion = 0.2; //molecules will maximum take __% of area of environment
 		double radius = 5;//sqrt(area * area_proportion / (PI * max_molecules_));
-		double vel_mag = 7;
-		
+		double vel_mag = 0;
+
+		int num_mol_per_row = floor(sqrt(env.num_molecules_ * env.dim_.x / env.dim_.y));
+		int num_mol_per_col = ceil(1.0 * env.num_molecules_ / num_mol_per_row);
+		double row_spacing = (env.dim_.y - 2 * radius) / (num_mol_per_col);
+		double col_spacing = (env.dim_.x - 2 * radius) / (num_mol_per_row);
+
 		for (int i = 0; i < env.num_molecules_; i++) {
-			//TO DO: make rand function in a helper file
-			double rand_x = (double)rand() / (float)RAND_MAX;
-			double rand_y = (double)rand() / (float)RAND_MAX;
-			double x = rand_x * (env_dim.x - 2 * radius) + env_pos.x + radius;
-			double y = rand_y * (env_dim.y - 2 * radius) + env_pos.y + radius;
+			double x = col_spacing * (i % num_mol_per_row + 1) + env.pos_.x;
+			double y = row_spacing * (i / num_mol_per_row + 1) + env.pos_.y;
 			
 			double rand_vel = (double)rand() / (float)RAND_MAX;
 			double theta = rand_vel * 2 * PI;
@@ -196,6 +196,7 @@ void MoleculeSimulator::simulate_molecules()
 	/// of the exited neighbor cell's neighbor within the neighbors
 	/// of the target molecule
 	/// </>
+
 	simulate_molecules_gpu << <grid, block >> > (env_molecules_d_,
 		pos_x_d_,
 		pos_y_d_,

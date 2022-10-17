@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	set_window();
-	create_environments(1);
+	create_environments(16);
 }
 void ofApp::exit()
 {
@@ -30,7 +30,7 @@ void ofApp::create_environments(int n)
 		cols_per_row[i] = cols;
 	}
 
-	int max_molecules = 5;
+	int max_molecules = 400;
 	int current_cell = 1;
 	for (int i = 0; i < rows; i++) {
 

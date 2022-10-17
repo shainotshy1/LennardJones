@@ -78,7 +78,8 @@ __global__ void simulate_molecules_gpu(int* env_molecules,
 		cell_dim_y);
 }
 
-__device__ void simulate_molecules(int i,
+//TODO: Generalize for multiple environments; fix nested for loop to shift bounds of surrounding molecules to depend on environments
+__device__ void simulate_molecules(int mol_index,
 	double* pos_x,
 	double* pos_y,
 	double* vel_x,
@@ -95,11 +96,11 @@ __device__ void simulate_molecules(int i,
 {
 #if 1
 
-	int row = (pos_x[i] - global_pos_x) / grid_dim;
-	int col = (pos_y[i] - global_pos_y) / grid_dim;
-	int index = (int)(row * cell_dim_x + col);
+	int row = (pos_x[mol_index] - global_pos_x) / grid_dim;
+	int col = (pos_y[mol_index] - global_pos_y) / grid_dim;
+	int grid_index = (int)(row * cell_dim_x + col);
 
-	if (index >= cell_dim_x * cell_dim_y) {
+	if (grid_index >= cell_dim_x * cell_dim_y) {
 		printf("ERROR index out of bound molecule");
 	}
 #else
@@ -111,8 +112,55 @@ __device__ void simulate_molecules(int i,
 		cell_dim_y,
 		grid_dim);
 #endif
-	if (grid[index] != i) {
-		printf("Error %d VS %d\n\n", grid[index], i);
+	if (grid[grid_index] != mol_index) {
+		printf("Error %d VS %d\n\n", grid[grid_index], mol_index);
+	}
+
+	int max_multiplier = 4;
+	int cells = cell_dim_x * cell_dim_y;
+	for (int i = grid_index - max_multiplier / 2; i < grid_index + (max_multiplier + 1)/ 2; i++) {
+		if (i % cell_dim_x == 0 && (grid_index + 1) % cell_dim_x == 0) { //check if molecule is on the right edge of the environment
+			continue;
+		}
+		if ((i + 1) % cell_dim_x == 0 && grid_index % cell_dim_x == 0) {
+			continue;
+		}
+		
+		for (int j = -max_multiplier/2; j < (max_multiplier + 1)/2; j++) {
+			if (i == grid_index) {
+				continue;
+			}
+
+			int other_mol_index = j * cell_dim_x + i;
+			if (other_mol_index > 0 && other_mol_index < cells) {
+				simulate_interaction(mol_index, 
+					other_mol_index,
+					pos_x,
+					pos_y,
+					radii);
+			}
+		}
+	}
+}
+
+__device__ void simulate_interaction(int mol_index,
+	int other_mol_index,
+	double* pos_x,
+	double* pos_y,
+	double* radii)
+{
+	double x1 = pos_x[mol_index];
+	double y1 = pos_y[mol_index];
+	double r1 = radii[mol_index];
+
+	double x2 = pos_x[other_mol_index];
+	double y2 = pos_y[other_mol_index];
+	double r2 = radii[mol_index];
+
+	double sqr_dist = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+	double sqr_rad = (r1 + r2) * (r1 + r2);
+	if (sqr_dist <= sqr_rad) {
+		printf("Collision!\n");
 	}
 }
 
